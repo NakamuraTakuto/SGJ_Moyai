@@ -6,6 +6,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
     // Start is called before the first frame update
     [SerializeField]
     [Header("ÉQÅ[ÉÄÉvÉåÉCíÜ")]
@@ -31,6 +32,18 @@ public class GameManager : MonoBehaviour
     int _moyaiCount = 0;
 
     //public float _norma = _moyaiObject.Length;
+    private void Awake()
+    {
+        if(Instance)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
     void Start()
     {
         _timetext = _attach.GetTimeText;
