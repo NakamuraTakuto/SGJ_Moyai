@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
-public class TakaiTest : MonoBehaviour
+public class aaaa : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
