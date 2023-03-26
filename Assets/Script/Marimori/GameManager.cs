@@ -17,8 +17,7 @@ public class GameManager : MonoBehaviour
     float _timeCount;
     float _time;
 
-    Text _timetext;
-    GameObject _gage0;
+    TextMeshPro _timetext;
     GameObject[] _moyaimage;
 
     GameObject _gameover;
@@ -28,7 +27,6 @@ public class GameManager : MonoBehaviour
     GameObject _title;
 
     float _gameOverTime;
-    float _moyaiNorma;
     int _moyaiCount = 0;
 
     //public float _norma = _moyaiObject.Length;
@@ -47,7 +45,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         _timetext = _attach.GetTimeText;
-        _gage0 = _attach.GetGage0;
         _moyaimage = _attach.GetMoyaiImage;
         _gameover = _attach.GetGameOver;
         _gameclear = _attach.GetGameClear;
@@ -55,7 +52,6 @@ public class GameManager : MonoBehaviour
         _next = _attach.GetNext;
         _title = _attach.GetTitle;
         _gameOverTime = _value.GetOverTime;
-        _moyaiNorma = _value.GetMoyaiNorma;
     }
     // Update is called once per frame
     void Update()
@@ -101,28 +97,58 @@ public class GameManager : MonoBehaviour
         _title.gameObject.SetActive(true);
         IsGame = false;
     }
+
     [System.Serializable]
     class AttachmentObj
     {
         [SerializeField] GameObject _gameover;
-        public GameObject GetGameOver => _gameover;
-        [SerializeField] GameObject _gameclear;
-        public GameObject GetGameClear => _gameclear;
-        [SerializeField] GameObject _retry;
-        public GameObject GetRetry => _retry;
-        [SerializeField] GameObject _title;
-        public GameObject GetTitle => _title;
-        [SerializeField] GameObject _next;
-        public GameObject GetNext => _next;[Header("UI-Play")]
-        [SerializeField] Text _timetext;
-        public Text GetTimeText => _timetext;
-        [SerializeField] GameObject _gage0;
-        public GameObject GetGage0 => _gage0;
-        [SerializeField] GameObject[] _moyaimage;
-        public GameObject[] GetMoyaiImage => _moyaimage;
-        [SerializeField] GameObject[] _moyaiObject;
-        public GameObject[] GetMoyaiObject => _moyaiObject;
+        public GameObject GetGameOver
+        {
+            set { _gameover = value; }
+            get { return _gameover; }
+        }
 
+        [SerializeField] GameObject _gameclear;
+        public GameObject GetGameClear
+        {
+            set { _gameclear = value; }
+            get { return _gameclear; }
+        }
+
+        [SerializeField] GameObject _retry;
+        public GameObject GetRetry
+        {
+            set { _retry = value; }
+            get { return _retry; }
+        }
+
+        [SerializeField] GameObject _title;
+        public GameObject GetTitle
+        {
+            set { _title = value; }
+            get { return _title; }
+        }
+
+        [SerializeField] GameObject _next;
+        public GameObject GetNext
+        {
+            set { _next = value; }
+            get { return _next; }
+        }
+
+        [SerializeField] TextMeshPro _timetext;
+        public TextMeshPro GetTimeText
+        {
+            set { _timetext = value; }
+            get { return _timetext; }
+        }
+
+        [SerializeField] GameObject[] _moyaimage;
+        public GameObject[] GetMoyaiImage
+        {
+            set { _moyaimage = value; }
+            get { return _moyaimage; }
+        }
     }
     [System.Serializable]
     class SetValues
@@ -130,9 +156,5 @@ public class GameManager : MonoBehaviour
         [Header("プレイ時間の初期値")]
         [SerializeField] float _gameOverTime = 60f;
         public float GetOverTime => _gameOverTime;
-
-        [Header("モヤイカウント")]
-        [SerializeField] float _moyaiNorma = 0f;
-        public float GetMoyaiNorma => _moyaiNorma;
     }
 }
