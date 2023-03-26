@@ -7,17 +7,20 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
     // Start is called before the first frame update
-    [SerializeField]
-    [Header("ÉQÅ[ÉÄÉvÉåÉCíÜ")]
+    [SerializeField] [Header("ÔøΩQÔøΩ[ÔøΩÔøΩÔøΩvÔøΩÔøΩÔøΩCÔøΩÔøΩ")]
     public bool IsGame = true;
+
+    [SerializeField] private GameSceneManager _gameSceneManager;
+    
     [SerializeField] AttachmentObj _attach;
     [SerializeField] SetValues _value;
 
     float _timeCount;
     float _time;
 
-    TextMeshPro _timetext;
+    TextMeshProUGUI _timetext;
     GameObject[] _moyaimage;
 
     GameObject _gameover;
@@ -32,7 +35,7 @@ public class GameManager : MonoBehaviour
     //public float _norma = _moyaiObject.Length;
     private void Awake()
     {
-        if(Instance)
+        if (Instance)
         {
             Destroy(gameObject);
         }
@@ -42,6 +45,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
     }
+
     void Start()
     {
         _timetext = _attach.GetTimeText;
@@ -53,6 +57,7 @@ public class GameManager : MonoBehaviour
         _title = _attach.GetTitle;
         _gameOverTime = _value.GetOverTime;
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -71,8 +76,7 @@ public class GameManager : MonoBehaviour
 
     public void MoyaiChange()
     {
-        _moyaimage[_moyaiCount].GetComponent<Renderer>()
-            .material.color = Color.white;
+        _moyaimage[_moyaiCount].GetComponent<Image>().color = Color.white;
         _moyaiCount++;
 
         if (_moyaiCount >= _moyaimage.Length)
@@ -83,10 +87,7 @@ public class GameManager : MonoBehaviour
 
     void GameClear()
     {
-        _gameclear.gameObject.SetActive(true);
-        _next.gameObject.SetActive(true);
-        _retry.gameObject.SetActive(true);
-        _title.gameObject.SetActive(true);
+        _gameSceneManager.SceneChange("GameClear");
         IsGame = false;
     }
 
@@ -102,6 +103,7 @@ public class GameManager : MonoBehaviour
     class AttachmentObj
     {
         [SerializeField] GameObject _gameover;
+
         public GameObject GetGameOver
         {
             set { _gameover = value; }
@@ -109,6 +111,7 @@ public class GameManager : MonoBehaviour
         }
 
         [SerializeField] GameObject _gameclear;
+
         public GameObject GetGameClear
         {
             set { _gameclear = value; }
@@ -116,6 +119,7 @@ public class GameManager : MonoBehaviour
         }
 
         [SerializeField] GameObject _retry;
+
         public GameObject GetRetry
         {
             set { _retry = value; }
@@ -123,6 +127,7 @@ public class GameManager : MonoBehaviour
         }
 
         [SerializeField] GameObject _title;
+
         public GameObject GetTitle
         {
             set { _title = value; }
@@ -130,31 +135,36 @@ public class GameManager : MonoBehaviour
         }
 
         [SerializeField] GameObject _next;
+
         public GameObject GetNext
         {
             set { _next = value; }
             get { return _next; }
         }
 
-        [SerializeField] TextMeshPro _timetext;
-        public TextMeshPro GetTimeText
+        [SerializeField] TextMeshProUGUI _timetext;
+
+        public TextMeshProUGUI GetTimeText
         {
             set { _timetext = value; }
             get { return _timetext; }
         }
 
         [SerializeField] GameObject[] _moyaimage;
+
         public GameObject[] GetMoyaiImage
         {
             set { _moyaimage = value; }
             get { return _moyaimage; }
         }
     }
+
     [System.Serializable]
     class SetValues
     {
-        [Header("ÉvÉåÉCéûä‘ÇÃèâä˙íl")]
-        [SerializeField] float _gameOverTime = 60f;
+        [Header("ÔøΩvÔøΩÔøΩÔøΩCÔøΩÔøΩÔøΩ‘ÇÃèÔøΩÔøΩÔøΩÔøΩl")] [SerializeField]
+        float _gameOverTime = 60f;
+
         public float GetOverTime => _gameOverTime;
     }
 }
