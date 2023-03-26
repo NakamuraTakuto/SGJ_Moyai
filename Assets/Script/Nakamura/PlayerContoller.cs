@@ -20,40 +20,42 @@ public class PlayerContoller : MonoBehaviour
         _crossHier = _attachClass.GetCrossHire;
         _cameraPointList[0].SetActive(true);
         _hold = _cameraPointList[0];
+        
     }
 
     private void Update()
     {
-        //inGame‚ªfalse‚Ì‚Écrosshair‚ğÁ‚·
+        Cursor.visible = false;
+        //inGameï¿½ï¿½falseï¿½Ìï¿½ï¿½ï¿½crosshairï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if(!GameManager.Instance.IsGame)
         {
             _crossHier.gameObject.SetActive(false);
         }
 
-        //Ray‚ğ”ò‚Î‚·
+        //Rayï¿½ï¿½ï¿½Î‚ï¿½
         Ray _ray = Camera.main.ScreenPointToRay(_crossHier.rectTransform.position);
 
-        //Ray‚ª“–‚½‚Á‚½‚Æ‚«‚É‘ÎÛ‚ÌObj‚ğæ“¾‚µ‚Äif‚Ì’†‚É“ü‚é
+        //Rayï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½É‘ÎÛ‚ï¿½Objï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ifï¿½Ì’ï¿½ï¿½É“ï¿½ï¿½ï¿½
         if (Physics.Raycast(_ray, out RaycastHit _hit))
         {
-            //‘ÎÛ‚ªActiveBase‚ğŠ‚µAƒQ[ƒ€Play’†‚É¶ƒNƒŠƒbƒN‚ğ‚³‚ê‚Ä‚¢‚é
+            //ï¿½ÎÛ‚ï¿½ActiveBaseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Qï¿½[ï¿½ï¿½Playï¿½ï¿½ï¿½Éï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
             if (_hit.collider.gameObject.TryGetComponent<ActiveBase>(out var _active)
                 && Input.GetButton("Fire1") && _shotOK)
             {
-                //Activeˆ—‚ğŒÄ‚Ño‚·
+                //Activeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½
                 _active.Active();
             }
 
         }
 
-        //ƒ}ƒEƒXƒzƒC[ƒ‹‚ª“®‚¢‚½‚Æ‚«‚ÉÀs
+        //ï¿½}ï¿½Eï¿½Xï¿½zï¿½Cï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Éï¿½ï¿½s
         _mouseWheel = Input.GetAxis("Mouse ScrollWheel");
 
-        //ƒ}ƒEƒXƒzƒC[ƒ‹‚ğ“®‚©‚µ‚½•ûŒü‚É‚æ‚é•ªŠò
+        //ï¿½}ï¿½Eï¿½Xï¿½zï¿½Cï¿½[ï¿½ï¿½ï¿½ğ“®‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½é•ªï¿½ï¿½
         if (_mouseWheel > 0)
         {
             _listNumber++;
-            //—×Ú‚µ‚Ä‚¢‚éƒJƒƒ‰‚ÉØ‚è‘Ö‚¦‚é
+            //ï¿½×Ú‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÉØ‚ï¿½Ö‚ï¿½ï¿½ï¿½
             if (_listNumber >= _cameraPointList.Count)
             {
                 _listNumber = 0;
@@ -73,7 +75,7 @@ public class PlayerContoller : MonoBehaviour
         {
             _listNumber--;
 
-            //—×Ú‚µ‚Ä‚¢‚éƒJƒƒ‰‚ÉØ‚è‘Ö‚¦‚é
+            //ï¿½×Ú‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÉØ‚ï¿½Ö‚ï¿½ï¿½ï¿½
             if (_listNumber < 0)
             {
                 _listNumber = _cameraPointList.Count - 1;
