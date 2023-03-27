@@ -19,7 +19,7 @@ public class MoyaiGenerator : MonoBehaviour
         _moyaiGenerator = GameObject.Find("MoyaiGenerator");
 
         //_checkListの中からランダムでGameManager.Instance.MoyaiNum個選ぶ
-        for (int i = 0; i < GameManager.Instance.GetSearchMoyai.Count; i++)
+        for (int i = 0; i < GameManager.Instance.GetSearchMoyai[GameManager.Instance.GetNowCamera]; i++)
         {
             _randomObj = _checkList[UnityEngine.Random.Range(0, _checkList.Count)];
             _useList.Add(_randomObj);
@@ -28,7 +28,7 @@ public class MoyaiGenerator : MonoBehaviour
         }
 
         //重複しない_checkListを全部インスタンス化
-        foreach (var list in _checkList)
+        foreach (var list in _useList)
         {
 
             _obj = Instantiate(_MoyaiPrefab, list.transform.position, Quaternion.identity);
