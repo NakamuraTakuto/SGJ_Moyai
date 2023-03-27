@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class ScorResult : MonoBehaviour
 {
     [SerializeField] GameObject _moyai;
     [SerializeField] GameObject _genelater;
+
+    [SerializeField] private TextMeshProUGUI _scoreText;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,11 +18,11 @@ public class ScorResult : MonoBehaviour
         {
             Instantiate(_moyai, _genelater.transform.position, Quaternion.identity);
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+      if (GameManager.Instance)
+      {
+          _scoreText.text = GameManager.Instance.Score.ToString();    
+      }
+      
     }
 }

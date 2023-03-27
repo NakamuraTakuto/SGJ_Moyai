@@ -19,11 +19,11 @@ public class MoyaiGenerator : MonoBehaviour
     {
         MoyaiGenerate();
     }
-    private void MoyaiGenerate()
+    void MoyaiGenerate()
     {
         _moyaiGenerator = GameObject.Find("MoyaiGenerator");
 
-        //_checkList‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚ÅGameManager.Instance.MoyaiNumŒÂ‘I‚Ô
+        //_checkListï¿½Ì’ï¿½ï¿½ï¿½ï¿½çƒ‰ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½GameManager.Instance.MoyaiNumï¿½Â‘Iï¿½ï¿½
         for (int i = 0; i < GameManager.Instance.GetSearchMoyai[GameManager.Instance.GetNowCamera]; i++)
         {
             _randomObj = _checkList[UnityEngine.Random.Range(0, _checkList.Count)];
@@ -32,10 +32,9 @@ public class MoyaiGenerator : MonoBehaviour
             _checkList.RemoveAt(_choiceIndex);
         }
 
-        //d•¡‚µ‚È‚¢_checkList‚ð‘S•”ƒCƒ“ƒXƒ^ƒ“ƒX‰»
+        //ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½_checkListï¿½ï¿½Sï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½
         foreach (var list in _useList)
         {
-
             _obj = Instantiate(_MoyaiPrefab, list.transform.position, Quaternion.identity);
             _obj.transform.parent = _moyaiGenerator.transform;
         }
