@@ -49,14 +49,25 @@ public class GameManager : MonoBehaviour
         _timetext = _attach.GetTimeText;
         _moyaimage = _attach.GetMoyaiImage;
         _playerobj = _attach.GetPlayerObj;
-        _scoreText = _attach.GetScoreText;
         _iconParent = _attach.GetIconParent;
         _iconPrefab = _attach.GetIconPrefab;
         _gameOverTime = _value.GetOverTime;
         _searchMoyai = _value.GetSearchMoyai;
 
-        _scoreText.text = _score.ToString("00");
-        IsGame = false;
+        if (_scoreText)
+        {
+            _scoreText = _attach.GetScoreText;
+            _scoreText.text = _score.ToString("00");
+        }
+        IsGame = false; 
+        
+        for (int i = 0; i < _searchMoyai[GetNowCamera]; i++)
+        {
+            GameObject icon = Instantiate(_iconPrefab);
+            icon.transform.parent = _iconParent.transform;
+            icon.GetComponent<Image>().color = Color.black;
+            _moyaimage.Add(icon);
+        }
     }
 
     // Update is called once per frame
