@@ -6,33 +6,29 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("現在使用しているカメラ")]
+    [SerializeField] int _nowCamera = 0;
+    public int GetNowCamera
+    {
+        set { _nowCamera = value; }
+        get { return _nowCamera; }
+    }
+
     public static GameManager Instance;
-
-    // Start is called before the first frame update
-    [SerializeField] [Header("�Q�[���v���C��")]
-    public bool IsGame = true;
-
-    [SerializeField] private GameSceneManager _gameSceneManager;
-    
+    [SerializeField] public bool IsGame = true;
     [SerializeField] AttachmentObj _attach;
     [SerializeField] SetValues _value;
-
+    [SerializeField] int _score = 0;
+    GameSceneManager _gameSceneManager;
     float _timeCount;
-    float _time;
-
     TextMeshProUGUI _timetext;
+    TextMeshProUGUI _scoreText;
     GameObject[] _moyaimage;
-
-    GameObject _gameover;
-    GameObject _gameclear;
-    GameObject _retry;
-    GameObject _next;
-    GameObject _title;
-
+    GameObject _playerobj;
     float _gameOverTime;
     int _moyaiCount = 0;
+    List<int> _searchMoyai;
 
-    //public float _norma = _moyaiObject.Length;
     private void Awake()
     {
         if (Instance)
@@ -50,12 +46,12 @@ public class GameManager : MonoBehaviour
     {
         _timetext = _attach.GetTimeText;
         _moyaimage = _attach.GetMoyaiImage;
-        _gameover = _attach.GetGameOver;
-        _gameclear = _attach.GetGameClear;
-        _retry = _attach.GetRetry;
-        _next = _attach.GetNext;
-        _title = _attach.GetTitle;
+        _playerobj = _attach.GetPlayerObj;
+        _scoreText = _attach.GetScoreText;
         _gameOverTime = _value.GetOverTime;
+        _searchMoyai = _value.GetSearchMoyai;
+
+        _scoreText.text = _score.ToString("00");
     }
 
     // Update is called once per frame
@@ -63,13 +59,13 @@ public class GameManager : MonoBehaviour
     {
         if (IsGame)
         {
-            _time += Time.deltaTime;
-            _timeCount = _gameOverTime - _time;
-            _timetext.text = $"{_timeCount.ToString("F0")}";
+            _timeCount = _gameOverTime;
+            _timeCount -= Time.deltaTime;
+            _timetext.text = _timeCount.ToString("F0");
 
             if (_timeCount <= 0)
             {
-                GameOver();
+                GameResult();
             }
         }
     }
@@ -78,72 +74,43 @@ public class GameManager : MonoBehaviour
     {
         _moyaimage[_moyaiCount].GetComponent<Image>().color = Color.white;
         _moyaiCount++;
+        _score++;
+        _scoreText.text = _score.ToString("00");
 
-        if (_moyaiCount >= _moyaimage.Length)
+        if (_moyaiCount >= _searchMoyai[GetNowCamera])
         {
-            GameClear();
+            GetNowCamera++;
+            _playerobj.GetComponent<PlayerContoller>().CamereChange();
+
+            for (int i = 0; i < _moyaiCount + 1; i++)
+            {
+                _moyaimage[i].GetComponent<Image>().color = Color.black;
+            }
+            
         }
     }
 
-    void GameClear()
+    public void GameResult()
     {
-        _gameSceneManager.SceneChange("GameClear");
-        IsGame = false;
-    }
-
-    void GameOver()
-    {
-        _gameover.gameObject.SetActive(true);
-        _retry.gameObject.SetActive(true);
-        _title.gameObject.SetActive(true);
+        _gameSceneManager.SceneChange("Result");
         IsGame = false;
     }
 
     [System.Serializable]
     class AttachmentObj
     {
-        [SerializeField] GameObject _gameover;
+        [Header("PlayerObjを設定")]
+        [SerializeField] GameObject _playerObj;
+        public GameObject GetPlayerObj => _playerObj;
 
-        public GameObject GetGameOver
-        {
-            set { _gameover = value; }
-            get { return _gameover; }
-        }
+        [SerializeField] GameSceneManager _gameSceneManager;
+        public GameSceneManager GetGameSceneManager => _gameSceneManager;
 
-        [SerializeField] GameObject _gameclear;
-
-        public GameObject GetGameClear
-        {
-            set { _gameclear = value; }
-            get { return _gameclear; }
-        }
-
-        [SerializeField] GameObject _retry;
-
-        public GameObject GetRetry
-        {
-            set { _retry = value; }
-            get { return _retry; }
-        }
-
-        [SerializeField] GameObject _title;
-
-        public GameObject GetTitle
-        {
-            set { _title = value; }
-            get { return _title; }
-        }
-
-        [SerializeField] GameObject _next;
-
-        public GameObject GetNext
-        {
-            set { _next = value; }
-            get { return _next; }
-        }
+        [Header("score用のテキストを設定")]
+        [SerializeField] TextMeshProUGUI _scoreText;
+        public TextMeshProUGUI GetScoreText => _scoreText;
 
         [SerializeField] TextMeshProUGUI _timetext;
-
         public TextMeshProUGUI GetTimeText
         {
             set { _timetext = value; }
@@ -151,7 +118,6 @@ public class GameManager : MonoBehaviour
         }
 
         [SerializeField] GameObject[] _moyaimage;
-
         public GameObject[] GetMoyaiImage
         {
             set { _moyaimage = value; }
@@ -162,9 +128,11 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     class SetValues
     {
-        [Header("�v���C���Ԃ̏����l")] [SerializeField]
-        float _gameOverTime = 60f;
-
+        [SerializeField]float _gameOverTime = 10f;
         public float GetOverTime => _gameOverTime;
+
+        [Header("モヤイの発見する数")]
+        [SerializeField] List<int> _searchMoyai;
+        public List<int> GetSearchMoyai => _searchMoyai;
     }
 }
