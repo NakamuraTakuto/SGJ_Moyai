@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -79,7 +80,6 @@ public class GameManager : MonoBehaviour
     {
         if (IsGame)
         {
-            _timeCount = _gameOverTime;
             _timeCount -= Time.deltaTime;
             _timetext.text = _timeCount.ToString("F0");
 
@@ -88,6 +88,10 @@ public class GameManager : MonoBehaviour
                 GameResult();
             }
         }
+        else
+        {
+            _timeCount = _gameOverTime;
+        }
     }
 
     public void MoyaiChange()
@@ -95,7 +99,7 @@ public class GameManager : MonoBehaviour
         _moyaimage[_moyaiCount].GetComponent<Image>().color = Color.white;
         _moyaiCount++;
         Score++;
-        _scoreText.text = Score.ToString("00");
+        //_scoreText.text = Score.ToString("00");
 
         if (_moyaiCount >= _searchMoyai[GetNowCamera])
         {
@@ -104,11 +108,21 @@ public class GameManager : MonoBehaviour
            _canvas.gameObject.SetActive(true);
            StartCoroutine(GameCount());
             _playerobj.GetComponent<PlayerContoller>().CamereChange();
+
+            foreach(var i in _moyaimage)
+            {
+                Destroy(i);
+                //_moyaimage.RemoveAt(0);
+            }
+
             for (int i = 0; i < _moyaimage.Count; i++)
             {
-                Destroy(_moyaimage[0]);
-                _moyaimage.RemoveAt(0);
+                //Destroy(_moyaimage[0]);
+                
             }
+
+            _moyaimage.Clear();
+
             for (int i = 0; i < _searchMoyai[GetNowCamera]; i++)
             {
                 GameObject icon = Instantiate(_iconPrefab);
@@ -116,6 +130,7 @@ public class GameManager : MonoBehaviour
                 icon.GetComponent<Image>().color = Color.black;
                 _moyaimage.Add(icon);
             }
+            _moyaiCount = 0;
         }
     }
 
@@ -128,7 +143,8 @@ public class GameManager : MonoBehaviour
     
     public void GameResult()
     {
-        _gameSceneManager.SceneChange("GameClear");
+        //_gameSceneManager.SceneChange("GameClear");
+        SceneManager.LoadScene("GameClear");
         IsGame = false;
     }
 
