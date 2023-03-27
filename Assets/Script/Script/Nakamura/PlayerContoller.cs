@@ -20,14 +20,13 @@ public class PlayerContoller : MonoBehaviour
         _crossHier = _attachClass.GetCrossHire;
         _cameraPointList[0].SetActive(true);
         _hold = _cameraPointList[0];
-        
     }
 
     private void Update()
     {
         Cursor.visible = false;
         //inGame��false�̎���crosshair������
-        if(!GameManager.Instance.IsGame)
+        if (!GameManager.Instance.IsGame)
         {
             _crossHier.gameObject.SetActive(false);
         }
@@ -40,12 +39,12 @@ public class PlayerContoller : MonoBehaviour
         {
             //�Ώۂ�ActiveBase���������A�Q�[��Play���ɍ��N���b�N������Ă���
             if (_hit.collider.gameObject.TryGetComponent<ActiveBase>(out var _active)
-                && Input.GetButton("Fire1") && _shotOK)
+                && Input.GetButton("Fire1"))
             {
-                //Active�������Ăяo��
-                _active.Active();
+                if (GameManager.Instance.IsGame || _hit.collider.gameObject.tag == ("StartMoyai"))
+                    //Active�������Ăяo��
+                    _active.Active();
             }
-
         }
     }
 
@@ -64,12 +63,13 @@ public class PlayerContoller : MonoBehaviour
     [System.Serializable]
     class AttachmentObj
     {
-        [Header("CameraPoint")]
-        [SerializeField] List<GameObject> _cameraPoint = new();
+        [Header("CameraPoint")] [SerializeField]
+        List<GameObject> _cameraPoint = new();
+
         public List<GameObject> GetCameraPoint => _cameraPoint;
 
-        [Header("CrossHire")]
-        [SerializeField] Image _crossHire;
+        [Header("CrossHire")] [SerializeField] Image _crossHire;
+
         public Image GetCrossHire
         {
             set { _crossHire = value; }

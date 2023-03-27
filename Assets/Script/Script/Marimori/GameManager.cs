@@ -8,22 +8,26 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("現在使用しているカメラ")]
-    [SerializeField] int _nowCamera = 0;
+    [Header("現在使用しているカメラ")] [SerializeField]
+    int _nowCamera = 0;
+
     public int GetNowCamera
     {
         set { _nowCamera = value; }
         get { return _nowCamera; }
     }
-    [Header("モヤイの発見する数")]
-    [SerializeField] List<int> _searchMoyai;
+
+    [Header("モヤイの発見する数")] [SerializeField] List<int> _searchMoyai;
     public List<int> GetSearchMoyai => _searchMoyai;
 
     public static GameManager Instance;
     [SerializeField] public bool IsGame = false;
     [SerializeField] AttachmentObj _attach;
     [SerializeField] SetValues _value;
-    [FormerlySerializedAs("_score")] [SerializeField] public int Score = 0;
+
+    [FormerlySerializedAs("_score")] [SerializeField]
+    public int Score = 0;
+
     GameSceneManager _gameSceneManager;
     float _timeCount;
     TextMeshProUGUI _timetext;
@@ -64,8 +68,9 @@ public class GameManager : MonoBehaviour
             _scoreText = _attach.GetScoreText;
             _scoreText.text = Score.ToString("00");
         }
-        IsGame = false; 
-        
+
+        IsGame = false;
+
         for (int i = 0; i < _searchMoyai[GetNowCamera]; i++)
         {
             GameObject icon = Instantiate(_iconPrefab);
@@ -105,24 +110,16 @@ public class GameManager : MonoBehaviour
         {
             GetNowCamera++;
             IsGame = false;
-           _canvas.gameObject.SetActive(true);
-           StartCoroutine(GameCount());
+            _canvas.gameObject.SetActive(true);
+            StartCoroutine(GameCount());
             _playerobj.GetComponent<PlayerContoller>().CamereChange();
 
-            foreach(var i in _moyaimage)
+            foreach (var i in _moyaimage)
             {
                 Destroy(i);
-                //_moyaimage.RemoveAt(0);
-            }
-
-            for (int i = 0; i < _moyaimage.Count; i++)
-            {
-                //Destroy(_moyaimage[0]);
-                
             }
 
             _moyaimage.Clear();
-
             for (int i = 0; i < _searchMoyai[GetNowCamera]; i++)
             {
                 GameObject icon = Instantiate(_iconPrefab);
@@ -130,6 +127,7 @@ public class GameManager : MonoBehaviour
                 icon.GetComponent<Image>().color = Color.black;
                 _moyaimage.Add(icon);
             }
+
             _moyaiCount = 0;
         }
     }
@@ -137,10 +135,13 @@ public class GameManager : MonoBehaviour
     IEnumerator GameCount()
     {
         yield return new WaitForSeconds(3f);
-        _canvas.gameObject.SetActive(false);
+        if (_canvas)
+        {
+            _canvas.gameObject.SetActive(false);
+        }
         IsGame = true;
     }
-    
+
     public void GameResult()
     {
         //_gameSceneManager.SceneChange("GameClear");
@@ -151,33 +152,39 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     class AttachmentObj
     {
-        [Header("PlayerObjを設定")]
-        [SerializeField] GameObject _playerObj;
+        [Header("PlayerObjを設定")] [SerializeField]
+        GameObject _playerObj;
+
         public GameObject GetPlayerObj => _playerObj;
 
         [SerializeField] GameSceneManager _gameSceneManager;
         public GameSceneManager GetGameSceneManager => _gameSceneManager;
 
-        [Header("score用のテキストを設定")]
-        [SerializeField] TextMeshProUGUI _scoreText;
+        [Header("score用のテキストを設定")] [SerializeField]
+        TextMeshProUGUI _scoreText;
+
         public TextMeshProUGUI GetScoreText => _scoreText;
 
         [SerializeField] TextMeshProUGUI _timetext;
+
         public TextMeshProUGUI GetTimeText
         {
             set { _timetext = value; }
             get { return _timetext; }
         }
 
-        [Header("アイコンを表示するための親Objを設定")]
-        [SerializeField] GameObject _iconParent;
+        [Header("アイコンを表示するための親Objを設定")] [SerializeField]
+        GameObject _iconParent;
+
         public GameObject GetIconParent => _iconParent;
 
-        [Header("アイコンのprefab")]
-        [SerializeField] GameObject _iconPrefab;
+        [Header("アイコンのprefab")] [SerializeField]
+        GameObject _iconPrefab;
+
         public GameObject GetIconPrefab => _iconPrefab;
 
         [SerializeField] List<GameObject> _moyaimage;
+
         public List<GameObject> GetMoyaiImage
         {
             set { _moyaimage = value; }
@@ -193,7 +200,7 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     class SetValues
     {
-        [SerializeField]float _gameOverTime = 10f;
+        [SerializeField] float _gameOverTime = 10f;
         public float GetOverTime => _gameOverTime;
     }
 }
