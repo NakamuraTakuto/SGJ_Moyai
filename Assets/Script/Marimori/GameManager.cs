@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
         set { _nowCamera = value; }
         get { return _nowCamera; }
     }
+    [Header("モヤイの発見する数")]
+    [SerializeField] List<int> _searchMoyai;
+    public List<int> GetSearchMoyai => _searchMoyai;
 
     public static GameManager Instance;
     [SerializeField] public bool IsGame = false;
@@ -27,9 +30,9 @@ public class GameManager : MonoBehaviour
     GameObject _playerobj;
     GameObject _iconParent;
     GameObject _iconPrefab;
+    private GameObject _canvas;
     float _gameOverTime;
     int _moyaiCount = 0;
-    List<int> _searchMoyai;
 
     private void Awake()
     {
@@ -51,8 +54,8 @@ public class GameManager : MonoBehaviour
         _playerobj = _attach.GetPlayerObj;
         _iconParent = _attach.GetIconParent;
         _iconPrefab = _attach.GetIconPrefab;
+        _canvas = _attach.GetCanvas;
         _gameOverTime = _value.GetOverTime;
-        _searchMoyai = _value.GetSearchMoyai;
 
         if (_scoreText)
         {
@@ -96,6 +99,9 @@ public class GameManager : MonoBehaviour
         if (_moyaiCount >= _searchMoyai[GetNowCamera])
         {
             GetNowCamera++;
+            IsGame = false;
+           _canvas.gameObject.SetActive(true);
+           StartCoroutine(GameCount());
             _playerobj.GetComponent<PlayerContoller>().CamereChange();
             for (int i = 0; i < _moyaimage.Count; i++)
             {
@@ -112,6 +118,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator GameCount()
+    {
+        yield return new WaitForSeconds(3f);
+        _canvas.gameObject.SetActive(false);
+        IsGame = true;
+    }
+    
     public void GameResult()
     {
         _gameSceneManager.SceneChange("GameClear");
@@ -153,6 +166,11 @@ public class GameManager : MonoBehaviour
             set { _moyaimage = value; }
             get { return _moyaimage; }
         }
+
+        [Header("CountCanvas")] [SerializeField]
+        private GameObject _canvas;
+
+        public GameObject GetCanvas => _canvas;
     }
 
     [System.Serializable]
@@ -160,9 +178,5 @@ public class GameManager : MonoBehaviour
     {
         [SerializeField]float _gameOverTime = 10f;
         public float GetOverTime => _gameOverTime;
-
-        [Header("モヤイの発見する数")]
-        [SerializeField] List<int> _searchMoyai;
-        public List<int> GetSearchMoyai => _searchMoyai;
     }
 }
