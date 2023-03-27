@@ -47,49 +47,18 @@ public class PlayerContoller : MonoBehaviour
             }
 
         }
+    }
 
-        //�}�E�X�z�C�[�����������Ƃ��Ɏ��s
-        _mouseWheel = Input.GetAxis("Mouse ScrollWheel");
-
-        //�}�E�X�z�C�[���𓮂����������ɂ�镪��
-        if (_mouseWheel > 0)
+    public void CamereChange()
+    {
+        if (GameManager.Instance.GetNowCamera >= _cameraPointList.Count)
         {
-            _listNumber++;
-            //�אڂ��Ă���J�����ɐ؂�ւ���
-            if (_listNumber >= _cameraPointList.Count)
-            {
-                _listNumber = 0;
-                _hold.SetActive(false);
-                _cameraPointList[_listNumber].SetActive(true);
-                _hold = _cameraPointList[_listNumber];
-            }
-            else if (_listNumber < _cameraPointList.Count)
-            {
-                _hold.SetActive(false);
-                _cameraPointList[_listNumber].SetActive(true);
-                _hold = _cameraPointList[_listNumber];
-            }
-
+            GameManager.Instance.GameResult();
         }
-        else if (_mouseWheel < 0)
-        {
-            _listNumber--;
 
-            //�אڂ��Ă���J�����ɐ؂�ւ���
-            if (_listNumber < 0)
-            {
-                _listNumber = _cameraPointList.Count - 1;
-                _hold.SetActive(false);
-                _cameraPointList[_listNumber].SetActive(true);
-                _hold = _cameraPointList[_listNumber];
-            }
-            else if (_listNumber >= 0)
-            {
-                _hold.SetActive(false);
-                _cameraPointList[_listNumber].SetActive(true);
-                _hold = _cameraPointList[_listNumber];
-            }
-        }
+        _hold.SetActive(false);
+        _cameraPointList[GameManager.Instance.GetNowCamera].SetActive(true);
+        _hold = _cameraPointList[GameManager.Instance.GetNowCamera];
     }
 
     [System.Serializable]
