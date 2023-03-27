@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public bool IsGame = false;
     [SerializeField] AttachmentObj _attach;
     [SerializeField] SetValues _value;
-    [SerializeField] int _score = 0;
+    [FormerlySerializedAs("_score")] [SerializeField] public int Score = 0;
     GameSceneManager _gameSceneManager;
     float _timeCount;
     TextMeshProUGUI _timetext;
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
         if (_scoreText)
         {
             _scoreText = _attach.GetScoreText;
-            _scoreText.text = _score.ToString("00");
+            _scoreText.text = Score.ToString("00");
         }
         IsGame = false; 
         
@@ -93,8 +94,8 @@ public class GameManager : MonoBehaviour
     {
         _moyaimage[_moyaiCount].GetComponent<Image>().color = Color.white;
         _moyaiCount++;
-        _score++;
-        _scoreText.text = _score.ToString("00");
+        Score++;
+        _scoreText.text = Score.ToString("00");
 
         if (_moyaiCount >= _searchMoyai[GetNowCamera])
         {
