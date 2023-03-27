@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     }
 
     public static GameManager Instance;
-    [SerializeField] public bool IsGame = true;
+    [SerializeField] public bool IsGame = false;
     [SerializeField] AttachmentObj _attach;
     [SerializeField] SetValues _value;
     [SerializeField] int _score = 0;
@@ -23,8 +23,10 @@ public class GameManager : MonoBehaviour
     float _timeCount;
     TextMeshProUGUI _timetext;
     TextMeshProUGUI _scoreText;
-    GameObject[] _moyaimage;
+    List<GameObject> _moyaimage;
     GameObject _playerobj;
+    GameObject _iconParent;
+    GameObject _iconPrefab;
     float _gameOverTime;
     int _moyaiCount = 0;
     List<int> _searchMoyai;
@@ -48,10 +50,13 @@ public class GameManager : MonoBehaviour
         _moyaimage = _attach.GetMoyaiImage;
         _playerobj = _attach.GetPlayerObj;
         _scoreText = _attach.GetScoreText;
+        _iconParent = _attach.GetIconParent;
+        _iconPrefab = _attach.GetIconPrefab;
         _gameOverTime = _value.GetOverTime;
         _searchMoyai = _value.GetSearchMoyai;
 
         _scoreText.text = _score.ToString("00");
+        IsGame = false;
     }
 
     // Update is called once per frame
@@ -81,18 +86,24 @@ public class GameManager : MonoBehaviour
         {
             GetNowCamera++;
             _playerobj.GetComponent<PlayerContoller>().CamereChange();
-
-            for (int i = 0; i < _moyaiCount + 1; i++)
+            for (int i = 0; i < _moyaimage.Count; i++)
             {
-                _moyaimage[i].GetComponent<Image>().color = Color.black;
+                Destroy(_moyaimage[0]);
+                _moyaimage.RemoveAt(0);
             }
-            
+            for (int i = 0; i < _searchMoyai[GetNowCamera]; i++)
+            {
+                GameObject icon = Instantiate(_iconPrefab);
+                icon.transform.parent = _iconParent.transform;
+                icon.GetComponent<Image>().color = Color.black;
+                _moyaimage.Add(icon);
+            }
         }
     }
 
     public void GameResult()
     {
-        _gameSceneManager.SceneChange("Result");
+        _gameSceneManager.SceneChange("GameClear");
         IsGame = false;
     }
 
@@ -117,8 +128,16 @@ public class GameManager : MonoBehaviour
             get { return _timetext; }
         }
 
-        [SerializeField] GameObject[] _moyaimage;
-        public GameObject[] GetMoyaiImage
+        [Header("アイコンを表示するための親Objを設定")]
+        [SerializeField] GameObject _iconParent;
+        public GameObject GetIconParent => _iconParent;
+
+        [Header("アイコンのprefab")]
+        [SerializeField] GameObject _iconPrefab;
+        public GameObject GetIconPrefab => _iconPrefab;
+
+        [SerializeField] List<GameObject> _moyaimage;
+        public List<GameObject> GetMoyaiImage
         {
             set { _moyaimage = value; }
             get { return _moyaimage; }
