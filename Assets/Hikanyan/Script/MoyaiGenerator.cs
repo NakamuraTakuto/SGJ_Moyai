@@ -14,7 +14,7 @@ public class MoyaiGenerator : MonoBehaviour
     GameObject _randomObj;
     GameObject _obj;
     int _choiceIndex;
-    private void Start()
+    private void MoyaiGenerate()
     {
         _moyaiGenerator = GameObject.Find("MoyaiGenerator");
 
